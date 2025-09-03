@@ -1,13 +1,16 @@
+using System;
 using ForemanSimulator.Configs;
 using ForemanSimulator.Runtime.Services.Input;
 using System.Threading;
+using Infrastructure.EventBus;
+using Infrastructure.EventBus.Signals;
 using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
 
 namespace ForemanSimulator.Runtime.Services.Player
 {
-    public class PlayerMovement : IInitializable
+    public class PlayerMovement : IInitializable, IDisposable
     {
         private const float GROUND_VELOCITY_Y = -2f;
 
@@ -21,22 +24,28 @@ namespace ForemanSimulator.Runtime.Services.Player
 
         private float _velocityY;
         private bool _isCanRun = true;
+        private bool _isMovementLocked = false;
+        private bool _isJumpLocked = false;
+        private EventBus _eventBus;
 
         [Inject]
         private void Construct(IInputService inputService, 
             CharacterController controller,
             CinemachineCamera camera,
-            PlayerMovementConfig mConfig)
+            PlayerMovementConfig mConfig,
+            EventBus eventBus)
         {
             _inputService = inputService;
             _controller = controller;
             _cinemachineCamera = camera;
             _config = mConfig;
+            _eventBus = eventBus;
         }
         
         public void Initialize()
         {
             _eyeTransform = _cinemachineCamera.transform;
+            _eventBus.Subscribe<InventoryActionSignal>(LockMovement, 0);
         }
 
         public void Update()
@@ -44,6 +53,7 @@ namespace ForemanSimulator.Runtime.Services.Player
             Move();
             Gravity();
         }
+        
 
         public void DisableSprint(bool isDisable)
         {
@@ -52,14 +62,24 @@ namespace ForemanSimulator.Runtime.Services.Player
 
         public void Jump()
         {
+            if (_isJumpLocked) return;
+            
             if (_controller.isGrounded)
             {
                 _velocityY = Mathf.Sqrt(_config.jumpHeight * -2f * _config.gravityForce);
             }
         }
 
+        private void LockMovement(InventoryActionSignal signal)
+        {
+            _isMovementLocked = signal.NeedToLock;
+            _isJumpLocked = signal.NeedToLock;
+        }
+        
         private void Move()
         {
+            if (_isMovementLocked) return;
+            
             Vector2 inputDirection = _inputService.NormalizedAxis;
 
             if (inputDirection != Vector2.zero)
@@ -87,6 +107,11 @@ namespace ForemanSimulator.Runtime.Services.Player
 
             _velocityY += _config.gravityForce * Time.deltaTime;
             _controller.Move(Vector3.up * (_velocityY * Time.deltaTime));
+        }
+
+        public void Dispose()
+        {
+            _eventBus.Unsubscribe<InventoryActionSignal>(LockMovement);
         }
     }
 }

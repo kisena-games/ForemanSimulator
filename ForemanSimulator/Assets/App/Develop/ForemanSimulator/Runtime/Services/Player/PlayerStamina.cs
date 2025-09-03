@@ -26,7 +26,7 @@ namespace ForemanSimulator.Runtime.Services.Player
 
             _currentStamina = _config.maxStamina;
         }
-
+        
         public void Update()
         {
             //Debug.Log(string.Format("_currentStamina = {0}", _currentStamina));

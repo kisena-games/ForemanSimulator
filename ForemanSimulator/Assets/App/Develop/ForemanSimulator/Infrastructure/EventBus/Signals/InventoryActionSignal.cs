@@ -2,11 +2,11 @@
 {
     public class InventoryActionSignal
     {
-        public readonly bool IsOpen;
+        public readonly bool NeedToLock;
 
-        public InventoryActionSignal(bool isOpen)
+        public InventoryActionSignal(bool needToLock)
         {
-            IsOpen = isOpen;
+            NeedToLock = needToLock;
         }
     }
 }

@@ -45,7 +45,6 @@ namespace ForemanSimulator.Runtime.Game.Player
             InitializePlayerMovement();
             InitializePlayerStamina();
             InitializeInteract();
-            InitializeInventories();
         }
 
         private void InitializePlayerMovement()
@@ -63,11 +62,6 @@ namespace ForemanSimulator.Runtime.Game.Player
             _inputService.OnInteractAction += _interact.Interact;
         }
 
-        private void InitializeInventories()
-        {
-            _mainInventoryPresenter.OnToggleAction += _cameraService.LockRotation;
-        }
-
         private void Update()
         {
             _movement.Update();
@@ -79,7 +73,6 @@ namespace ForemanSimulator.Runtime.Game.Player
             _inputService.OnJumpAction -= _movement.Jump;
             _stamina.OnEmptyStamina -= _movement.DisableSprint;
             _inputService.OnInteractAction -= _interact.Interact;
-            _mainInventoryPresenter.OnToggleAction -= _cameraService.LockRotation;
 
             _quickAccessInventoryPresenter.Dispose();
             _mainInventoryPresenter.Dispose();
