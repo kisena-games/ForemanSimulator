@@ -12,5 +12,11 @@ namespace ForemanSimulator.Infrastructure
         {
             
         }
+
+        public override void Start()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 }

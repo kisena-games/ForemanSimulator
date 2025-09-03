@@ -10,8 +10,6 @@ namespace ForemanSimulator.Runtime.Services.StateMachine
     {
         protected readonly StateMachine _stateMachine;
 
-        private CancellationTokenSource _cts;
-
         public State(StateMachine stateMachine)
         {
             _stateMachine = stateMachine;
@@ -20,31 +18,22 @@ namespace ForemanSimulator.Runtime.Services.StateMachine
         public virtual async UniTask OnEnterAsync(CancellationToken token)
         {
             await UniTask.Yield(token);
-
-            _cts = new CancellationTokenSource();
         }
 
         public virtual async UniTask OnExitAsync(CancellationToken token)
         {
-            if (_cts != null)
-            {
-                _cts.Cancel();
-                _cts.Dispose();
-                _cts = null;
-            }
-
             await UniTask.Yield(token);
         }
 
-        public async UniTask OnUpdate()
+        public async UniTask OnUpdate(CancellationToken token)
         {
             try
             {
-                while (!_cts.IsCancellationRequested)
+                while (!token.IsCancellationRequested)
                 {
                     Update();
 
-                    await UniTask.Yield(PlayerLoopTiming.Update, _cts.Token);
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
                 }
             }
             catch (OperationCanceledException){ }

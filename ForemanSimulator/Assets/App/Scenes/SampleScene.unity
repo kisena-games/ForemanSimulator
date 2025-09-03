@@ -8060,6 +8060,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1519066416031408747, guid: e3bf623ad22b13c4b80f65d575fac2f9, type: 3}
+      propertyPath: _mainInventoryView
+      value: 
+      objectReference: {fileID: 325521290}
+    - target: {fileID: 1519066416031408747, guid: e3bf623ad22b13c4b80f65d575fac2f9, type: 3}
+      propertyPath: _quickAccessInventoryView
+      value: 
+      objectReference: {fileID: 253050400}
     - target: {fileID: 5662445015158929627, guid: e3bf623ad22b13c4b80f65d575fac2f9, type: 3}
       propertyPath: m_Name
       value: Player

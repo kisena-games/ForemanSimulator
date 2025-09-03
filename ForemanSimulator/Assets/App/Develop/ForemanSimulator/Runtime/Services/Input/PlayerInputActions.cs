@@ -155,6 +155,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""MainInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""ad18d6e0-ea31-48aa-ba77-78f45423099f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""ScrollSlot"",
                     ""type"": ""Value"",
                     ""id"": ""bc457057-c83a-4ba0-808f-eac8092e3861"",
@@ -278,7 +287,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
                     ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""DeltaTimeScale,ScaleVector2(x=0.1,y=0.1)"",
                     ""groups"": "";Keyboard&Mouse;Touch"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
@@ -314,6 +323,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17d17b37-0b47-4df6-b455-f4a1c8c367ba"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MainInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1051,6 +1071,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_MainInventory = m_Player.FindAction("MainInventory", throwIfNotFound: true);
         m_Player_ScrollSlot = m_Player.FindAction("ScrollSlot", throwIfNotFound: true);
         m_Player_SelectScroll = m_Player.FindAction("SelectScroll", throwIfNotFound: true);
         // UI
@@ -1153,6 +1174,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_MainInventory;
     private readonly InputAction m_Player_ScrollSlot;
     private readonly InputAction m_Player_SelectScroll;
     /// <summary>
@@ -1194,6 +1216,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Sprint".
         /// </summary>
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/MainInventory".
+        /// </summary>
+        public InputAction @MainInventory => m_Wrapper.m_Player_MainInventory;
         /// <summary>
         /// Provides access to the underlying input action "Player/ScrollSlot".
         /// </summary>
@@ -1249,6 +1275,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @MainInventory.started += instance.OnMainInventory;
+            @MainInventory.performed += instance.OnMainInventory;
+            @MainInventory.canceled += instance.OnMainInventory;
             @ScrollSlot.started += instance.OnScrollSlot;
             @ScrollSlot.performed += instance.OnScrollSlot;
             @ScrollSlot.canceled += instance.OnScrollSlot;
@@ -1287,6 +1316,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @MainInventory.started -= instance.OnMainInventory;
+            @MainInventory.performed -= instance.OnMainInventory;
+            @MainInventory.canceled -= instance.OnMainInventory;
             @ScrollSlot.started -= instance.OnScrollSlot;
             @ScrollSlot.performed -= instance.OnScrollSlot;
             @ScrollSlot.canceled -= instance.OnScrollSlot;
@@ -1642,6 +1674,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSprint(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MainInventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMainInventory(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "ScrollSlot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

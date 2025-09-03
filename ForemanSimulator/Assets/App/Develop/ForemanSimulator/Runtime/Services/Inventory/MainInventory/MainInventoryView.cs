@@ -20,6 +20,11 @@ namespace ForemanSimulator.Runtime.Services.Inventory
             RenderSlots();
         }
 
+        public void SetActive(bool isActive)
+        {
+            gameObject.SetActive(isActive);
+        }
+
         private void ResetView()
         {
             int rowsCount = _slotViews.GetLength(0);

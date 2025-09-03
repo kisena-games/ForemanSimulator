@@ -37,7 +37,7 @@ namespace ForemanSimulator.Runtime.Services.StateMachine
                 if (_currentState != null)
                 {
                     await _currentState.OnEnterAsync(_cts.Token);
-                    _currentState.OnUpdate().Forget();
+                    _currentState.OnUpdate(_cts.Token).Forget();
                 }
             }
             catch (OperationCanceledException)
@@ -50,6 +50,11 @@ namespace ForemanSimulator.Runtime.Services.StateMachine
                 _cts?.Dispose();
                 _cts = null;
             }
+
+        }
+
+        public void Update()
+        {
 
         }
 

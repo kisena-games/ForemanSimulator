@@ -11,10 +11,13 @@ namespace IceControl.Runtime.Services.Input
         public event Action OnUseAction;
         public event Action OnAlternativeUseAction;
         public event Action OnInteractAction;
+        public event Action OnMainInventoryAction;
 
         private Vector2 _axis;
         private PlayerInputActions _actions;
         private PlayerInputActions.PlayerActions _playerMapActions;
+
+        private bool _isLock = false;
 
         public Vector2 NormalizedAxis => _axis;
         public bool IsJump { get; private set; }
@@ -36,7 +39,10 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnMove(InputAction.CallbackContext context)
         {
-            _axis = context.ReadValue<Vector2>();
+            if (!_isLock)
+            {
+                _axis = context.ReadValue<Vector2>();
+            }
         }
 
         public void OnLook(InputAction.CallbackContext context)
@@ -46,7 +52,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnUse(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.performed && !_isLock)
             {
                 OnUseAction?.Invoke();
             }
@@ -54,7 +60,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnAlternativeUse(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.performed && !_isLock)
             {
                 OnAlternativeUseAction?.Invoke();
             }
@@ -62,7 +68,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.performed && !_isLock)
             {
                 OnInteractAction?.Invoke();
             }
@@ -70,7 +76,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.performed && !_isLock)
             {
                 OnJumpAction?.Invoke();
             }
@@ -78,7 +84,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnSprint(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.performed && !_isLock)
             {
                 IsSprint = true;
             }
@@ -96,6 +102,27 @@ namespace IceControl.Runtime.Services.Input
         public void OnSelectScroll(InputAction.CallbackContext context)
         {
             
+        }
+
+        public void OnMainInventory(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                OnMainInventoryAction?.Invoke();
+            }
+        }
+
+        public void Lock(bool isNeedToLock)
+        {
+            _isLock = isNeedToLock;
+
+            if (_isLock)
+            {
+                _axis = Vector2.zero;
+            }
+
+            Cursor.lockState = _isLock ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = _isLock;
         }
     }
 }

@@ -161,10 +161,11 @@ MonoBehaviour:
   _camera: {fileID: 9190547309569580661}
   _movementConfig: {fileID: 11400000, guid: 6af792ebaa29e534ebfd789e7a9a57a5, type: 2}
   _staminaConfig: {fileID: 11400000, guid: 137c1e0dd6a296c4f962d4d7f4082635, type: 2}
-  _quickAccessInventoryView: {fileID: 0}
   _interactMask:
     serializedVersion: 2
     m_Bits: 1024
+  _quickAccessInventoryView: {fileID: 0}
+  _mainInventoryView: {fileID: 0}
 --- !u!1 &7089729290555457753
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +316,7 @@ MonoBehaviour:
       Owner: {fileID: 5139140765157195180}
       Enabled: 1
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
+        InputAction: {fileID: -5630151704836100654, guid: 0b6293722addec94c91365c607004c70, type: 3}
         Gain: 1
         CancelDeltaTime: 0
       InputValue: 0
@@ -326,7 +327,7 @@ MonoBehaviour:
       Owner: {fileID: 5139140765157195180}
       Enabled: 1
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
+        InputAction: {fileID: -5630151704836100654, guid: 0b6293722addec94c91365c607004c70, type: 3}
         Gain: -1
         CancelDeltaTime: 0
       InputValue: 0

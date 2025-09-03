@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55f53492ff887b1458a37b9b64e18f37, type: 3}
   m_Name: PlayerMovementConfig
   m_EditorClassIdentifier: 
-  walkSpeed: 4
-  sprintSpeed: 7
+  walkSpeed: 6
+  sprintSpeed: 10
   jumpHeight: 2
-  gravityForce: -9.81
+  gravityForce: -25
