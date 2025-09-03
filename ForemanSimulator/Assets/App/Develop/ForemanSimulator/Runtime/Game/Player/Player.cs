@@ -26,18 +26,15 @@ namespace ForemanSimulator.Runtime.Game.Player
         private PlayerInteract _interact;
         private QuickAccessInventoryPresenter _quickAccessInventoryPresenter;
         private MainInventoryPresenter _mainInventoryPresenter;
-        private EventBus _eventBus;
         
         [Inject]
         public void Construct(IInputService inputService,
             MainInventoryPresenter mainInventoryPresenter,
-            QuickAccessInventoryPresenter quickAccessInventoryPresenter,
-            EventBus eventBus)
+            QuickAccessInventoryPresenter quickAccessInventoryPresenter)
         {
             _inputService = inputService;
             _mainInventoryPresenter = mainInventoryPresenter;
             _quickAccessInventoryPresenter = quickAccessInventoryPresenter;
-            _eventBus = eventBus;
         }
 
         private void Awake()
@@ -47,12 +44,6 @@ namespace ForemanSimulator.Runtime.Game.Player
             InitializePlayerStamina();
             InitializeInteract();
             InitializeInventories();
-            _eventBus.Subscribe<InventoryActionSignal>(Test, 0);
-        }
-
-        private void Test(InventoryActionSignal signal)
-        {
-            Debug.Log(signal.IsOpen);
         }
 
         private void InitializePlayerCamera()
