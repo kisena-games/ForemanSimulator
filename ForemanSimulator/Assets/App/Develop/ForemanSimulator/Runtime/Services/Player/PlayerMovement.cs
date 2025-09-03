@@ -1,32 +1,42 @@
 using ForemanSimulator.Configs;
 using ForemanSimulator.Runtime.Services.Input;
 using System.Threading;
+using Unity.Cinemachine;
 using UnityEngine;
+using Zenject;
 
 namespace ForemanSimulator.Runtime.Services.Player
 {
-    public class PlayerMovement
+    public class PlayerMovement : IInitializable
     {
         private const float GROUND_VELOCITY_Y = -2f;
 
-        private readonly IInputService _inputService;
-        private readonly CharacterController _controller;
-        private readonly Transform _eyeTransform;
-        private readonly PlayerMovementConfig _config;
+        private CinemachineCamera _cinemachineCamera;
+        private IInputService _inputService;
+        private CharacterController _controller;
+        private Transform _eyeTransform;
+        private PlayerMovementConfig _config;
 
-        private readonly CancellationTokenSource _disposeTokenSource;
+        private readonly CancellationTokenSource _cts = new();
 
         private float _velocityY;
         private bool _isCanRun = true;
 
-        public PlayerMovement(IInputService inputService, CharacterController controller, Transform eyeTransform, PlayerMovementConfig config)
+        [Inject]
+        private void Construct(IInputService inputService, 
+            CharacterController controller,
+            CinemachineCamera camera,
+            PlayerMovementConfig mConfig)
         {
             _inputService = inputService;
             _controller = controller;
-            _eyeTransform = eyeTransform;
-            _config = config;
-
-            _disposeTokenSource = new CancellationTokenSource();
+            _cinemachineCamera = camera;
+            _config = mConfig;
+        }
+        
+        public void Initialize()
+        {
+            _eyeTransform = _cinemachineCamera.transform;
         }
 
         public void Update()

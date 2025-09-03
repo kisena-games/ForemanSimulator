@@ -1,15 +1,23 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using Zenject;
 
-public class PlayerCamera
+public class PlayerCamera : IInitializable
 {
+    private CinemachineCamera _cinemachineCamera;
     private CinemachineInputAxisController _inputAxisController;
 
-    public PlayerCamera(CinemachineCamera camera)
+    [Inject]
+    private void Construct(CinemachineCamera camera)
     {
-        _inputAxisController = camera.GetComponent<CinemachineInputAxisController>();
+        _cinemachineCamera = camera;
     }
 
+    public void Initialize()
+    {
+        _inputAxisController = _cinemachineCamera.GetComponent<CinemachineInputAxisController>();
+    }
+    
     public void LockRotation(bool isNeedToLock)
     {
         _inputAxisController.enabled = !isNeedToLock;

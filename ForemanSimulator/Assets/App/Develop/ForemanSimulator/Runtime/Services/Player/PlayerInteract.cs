@@ -1,4 +1,6 @@
+using Unity.Cinemachine;
 using UnityEngine;
+using Zenject;
 
 namespace ForemanSimulator.Runtime.Services.Player
 {
@@ -8,9 +10,10 @@ namespace ForemanSimulator.Runtime.Services.Player
 
         private Camera _playerCamera;
         private LayerMask _interactMask;
-        private float _rayDistance = 3f;
-
-        public PlayerInteract(Camera playerCamera, LayerMask interactMask)
+        private const float _rayDistance = 3f;
+        
+        [Inject]
+        private void Construct(Camera playerCamera, LayerMask interactMask)
         {
             _playerCamera = playerCamera;
             _interactMask = interactMask;

@@ -2,6 +2,7 @@ using ForemanSimulator.Configs;
 using ForemanSimulator.Runtime.Services.Input;
 using System;
 using UnityEngine;
+using Zenject;
 
 namespace ForemanSimulator.Runtime.Services.Player
 {
@@ -9,13 +10,15 @@ namespace ForemanSimulator.Runtime.Services.Player
     {
         public event Action<bool> OnEmptyStamina;
 
-        private readonly IInputService _inputService;
-        private readonly PlayerStaminaConfig _config;
-        private readonly IStaminaRegenerationStrategy _regenerationStrategy;
+        private IInputService _inputService;
+        private PlayerStaminaConfig _config;
+        private IStaminaRegenerationStrategy _regenerationStrategy;
 
         private float _currentStamina;
-
-        public PlayerStamina(IInputService inputService, PlayerStaminaConfig config)
+        
+        [Inject]
+        private void Construct(IInputService inputService, 
+            PlayerStaminaConfig config)
         {
             _inputService = inputService;
             _regenerationStrategy = new DefaultStaminaRegenerationStrategy(config.walkRegenerateMultiplier);

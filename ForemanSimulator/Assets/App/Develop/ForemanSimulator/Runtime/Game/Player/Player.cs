@@ -13,11 +13,6 @@ namespace ForemanSimulator.Runtime.Game.Player
     [RequireComponent(typeof(CharacterController))]
     public class Player : MonoBehaviour
     {
-        [SerializeField] private CinemachineCamera _camera;
-        [SerializeField] private PlayerMovementConfig _movementConfig;
-        [SerializeField] private PlayerStaminaConfig _staminaConfig;
-        [SerializeField] private LayerMask _interactMask;
-
         private IInputService _inputService;
 
         private PlayerCamera _cameraService;
@@ -26,47 +21,45 @@ namespace ForemanSimulator.Runtime.Game.Player
         private PlayerInteract _interact;
         private QuickAccessInventoryPresenter _quickAccessInventoryPresenter;
         private MainInventoryPresenter _mainInventoryPresenter;
-        
+
         [Inject]
-        public void Construct(IInputService inputService,
+        private void Construct(IInputService inputService,
             MainInventoryPresenter mainInventoryPresenter,
-            QuickAccessInventoryPresenter quickAccessInventoryPresenter)
+            QuickAccessInventoryPresenter quickAccessInventoryPresenter,
+            PlayerCamera playerCamera,
+            PlayerMovement playerMovement,
+            PlayerStamina playerStamina,
+            PlayerInteract playerInteract)
         {
             _inputService = inputService;
             _mainInventoryPresenter = mainInventoryPresenter;
             _quickAccessInventoryPresenter = quickAccessInventoryPresenter;
+            _cameraService = playerCamera;
+            _movement = playerMovement;
+            _stamina = playerStamina;
+            _interact = playerInteract;
         }
 
         private void Awake()
         {
-            InitializePlayerCamera();
             InitializePlayerMovement();
             InitializePlayerStamina();
             InitializeInteract();
             InitializeInventories();
         }
 
-        private void InitializePlayerCamera()
-        {
-            _cameraService = new PlayerCamera(_camera);
-        }
-
         private void InitializePlayerMovement()
         {
-            CharacterController characterController = GetComponent<CharacterController>();
-            _movement = new PlayerMovement(_inputService, characterController, _camera.transform, _movementConfig);
             _inputService.OnJumpAction += _movement.Jump;
         }
 
         private void InitializePlayerStamina()
         {
-            _stamina = new PlayerStamina(_inputService, _staminaConfig);
             _stamina.OnEmptyStamina += _movement.DisableSprint;
         }
 
         private void InitializeInteract()
         {
-            _interact = new PlayerInteract(Camera.main, _interactMask);
             _inputService.OnInteractAction += _interact.Interact;
         }
 
