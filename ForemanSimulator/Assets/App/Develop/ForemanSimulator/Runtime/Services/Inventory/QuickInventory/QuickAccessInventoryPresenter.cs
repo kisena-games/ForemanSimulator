@@ -1,28 +1,28 @@
 using ForemanSimulator.Runtime.Services.Input;
 using System;
 using UnityEngine;
+using Zenject;
 
 namespace ForemanSimulator.Runtime.Services.Inventory
 {
-    public class QuickAccessInventoryPresenter
+    public class QuickAccessInventoryPresenter : IInitializable, IDisposable
     {
-        private readonly QuickAccessInventory _inventoryModel;
-        private readonly QuickAccessInventoryView _inventoryView;
-
-        public QuickAccessInventoryPresenter(QuickAccessInventory model, QuickAccessInventoryView view, IInputService inputService)
+        private QuickAccessInventory _inventoryModel;
+        private QuickAccessInventoryView _inventoryView;
+        
+        [Inject]
+        private void Construct(QuickAccessInventoryView view)
         {
-            _inventoryModel = model;
+            _inventoryModel = new QuickAccessInventory(9);
             _inventoryView = view;
-
-            Initialize();
         }
 
-        public void Dispose()
+        public void Initialize()
         {
-
+            
         }
-
-        private void Initialize()
+        
+        public void Dispose()
         {
 
         }

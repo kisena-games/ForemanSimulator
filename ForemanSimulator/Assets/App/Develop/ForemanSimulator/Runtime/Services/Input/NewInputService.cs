@@ -39,10 +39,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnMove(InputAction.CallbackContext context)
         {
-            if (!_isLock)
-            {
-                _axis = context.ReadValue<Vector2>();
-            }
+            _axis = context.ReadValue<Vector2>();
         }
 
         public void OnLook(InputAction.CallbackContext context)
@@ -52,7 +49,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnUse(InputAction.CallbackContext context)
         {
-            if (context.performed && !_isLock)
+            if (context.performed)
             {
                 OnUseAction?.Invoke();
             }
@@ -60,7 +57,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnAlternativeUse(InputAction.CallbackContext context)
         {
-            if (context.performed && !_isLock)
+            if (context.performed)
             {
                 OnAlternativeUseAction?.Invoke();
             }
@@ -68,7 +65,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (context.performed && !_isLock)
+            if (context.performed)
             {
                 OnInteractAction?.Invoke();
             }
@@ -76,7 +73,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (context.performed && !_isLock)
+            if (context.performed)
             {
                 OnJumpAction?.Invoke();
             }
@@ -84,7 +81,7 @@ namespace IceControl.Runtime.Services.Input
 
         public void OnSprint(InputAction.CallbackContext context)
         {
-            if (context.performed && !_isLock)
+            if (context.performed)
             {
                 IsSprint = true;
             }
@@ -112,7 +109,7 @@ namespace IceControl.Runtime.Services.Input
             }
         }
 
-        public void Lock(bool isNeedToLock)
+        public void LockMouse(bool isNeedToLock)
         {
             _isLock = isNeedToLock;
 

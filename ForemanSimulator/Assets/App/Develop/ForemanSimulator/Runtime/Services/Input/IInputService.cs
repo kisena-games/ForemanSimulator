@@ -15,6 +15,6 @@ namespace ForemanSimulator.Runtime.Services.Input
         bool IsJump { get; }
         bool IsSprint { get; }
 
-        void Lock(bool isNeedToLock);
+        void LockMouse(bool isNeedToLock);
     }
 }

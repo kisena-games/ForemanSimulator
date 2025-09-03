@@ -2,6 +2,8 @@ using ForemanSimulator.Configs;
 using ForemanSimulator.Runtime.Services.Input;
 using ForemanSimulator.Runtime.Services.Inventory;
 using ForemanSimulator.Runtime.Services.Player;
+using Infrastructure.EventBus;
+using Infrastructure.EventBus.Signals;
 using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
@@ -16,9 +18,6 @@ namespace ForemanSimulator.Runtime.Game.Player
         [SerializeField] private PlayerStaminaConfig _staminaConfig;
         [SerializeField] private LayerMask _interactMask;
 
-        [SerializeField] private QuickAccessInventoryView _quickAccessInventoryView;
-        [SerializeField] private MainInventoryView _mainInventoryView;
-
         private IInputService _inputService;
 
         private PlayerCamera _cameraService;
@@ -27,21 +26,33 @@ namespace ForemanSimulator.Runtime.Game.Player
         private PlayerInteract _interact;
         private QuickAccessInventoryPresenter _quickAccessInventoryPresenter;
         private MainInventoryPresenter _mainInventoryPresenter;
-
+        private EventBus _eventBus;
+        
         [Inject]
-        public void Construct(IInputService inputService)
+        public void Construct(IInputService inputService,
+            MainInventoryPresenter mainInventoryPresenter,
+            QuickAccessInventoryPresenter quickAccessInventoryPresenter,
+            EventBus eventBus)
         {
             _inputService = inputService;
-            Initialize();
+            _mainInventoryPresenter = mainInventoryPresenter;
+            _quickAccessInventoryPresenter = quickAccessInventoryPresenter;
+            _eventBus = eventBus;
         }
 
-        public void Initialize()
+        private void Awake()
         {
             InitializePlayerCamera();
             InitializePlayerMovement();
             InitializePlayerStamina();
             InitializeInteract();
             InitializeInventories();
+            _eventBus.Subscribe<InventoryActionSignal>(Test, 0);
+        }
+
+        private void Test(InventoryActionSignal signal)
+        {
+            Debug.Log(signal.IsOpen);
         }
 
         private void InitializePlayerCamera()
@@ -70,11 +81,6 @@ namespace ForemanSimulator.Runtime.Game.Player
 
         private void InitializeInventories()
         {
-            QuickAccessInventory _quickAccessInventory = new QuickAccessInventory(9);
-            MainInventory _mainInventory = new MainInventory(3, 5);
-
-            _quickAccessInventoryPresenter = new QuickAccessInventoryPresenter(_quickAccessInventory, _quickAccessInventoryView, _inputService);
-            _mainInventoryPresenter = new MainInventoryPresenter(_mainInventory, _mainInventoryView, _inputService);
             _mainInventoryPresenter.OnToggleAction += _cameraService.LockRotation;
         }
 
